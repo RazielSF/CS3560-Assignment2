@@ -242,8 +242,6 @@ public class Admin implements ActionListener, TreeSelectionListener
                     int index = groupList.indexOf(parentNode.getUserObject());
 
                     groupList.get(index).addEntity(newUser);
-                    
-                    System.out.println(groupList.get(index).getId() + ": " + groupList.get(index).getEntities());
 
                 }
             } 
@@ -301,10 +299,6 @@ public class Admin implements ActionListener, TreeSelectionListener
                     int index = groupList.indexOf(parentNode.getUserObject());
 
                     groupList.get(index).addEntity(newGroup);
-
-                    
-                    System.out.println(groupList.get(index).getEntities());
-
 
                 }
             } 
