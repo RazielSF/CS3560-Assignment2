@@ -29,6 +29,12 @@ public class Admin implements ActionListener, TreeSelectionListener
     private JButton showMsgTotalButton;
     private JButton showPositiveButton;
 
+    //Added for assignment 3
+    private JButton checkValidationButton;
+    private JButton findLastUpdatedUserButton;
+    private JTextField validationField;
+    private JTextField lastUpdatedField;
+
     private JTree treeView;
 
     private Font textFont = new Font("Arial", Font.BOLD, 20);
@@ -71,7 +77,7 @@ public class Admin implements ActionListener, TreeSelectionListener
         addGroupField.setFont(textFont);
 
         showButtonsField = new JTextField("Press a 'Show Button'");
-        showButtonsField.setBounds(450, 400, 425, 50);
+        showButtonsField.setBounds(450, 425, 425, 50);
         showButtonsField.setFont(textFont);
 
         //Add User/Group Buttons
@@ -119,6 +125,28 @@ public class Admin implements ActionListener, TreeSelectionListener
         showPositiveButton.setFocusable(false);
         showPositiveButton.addActionListener(this);
 
+        //New Buttons for Assignment 3
+        checkValidationButton = new JButton("Check Validation");
+        checkValidationButton.setBounds(450, 325, 200, 50);
+        checkValidationButton.setFont(textFont2);
+        checkValidationButton.setFocusable(false);
+        checkValidationButton.addActionListener(this);
+
+        findLastUpdatedUserButton = new JButton("Find Last Updated User");
+        findLastUpdatedUserButton.setBounds(675, 325, 200, 50);
+        findLastUpdatedUserButton.setFont(textFont2);
+        findLastUpdatedUserButton.setFocusable(false);
+        findLastUpdatedUserButton.addActionListener(this);
+
+        //New Fields for Assignment 3
+        validationField = new JTextField("Validation Field");
+        validationField.setBounds(450, 250, 200, 50);
+        validationField.setFont(textFont);
+
+        lastUpdatedField = new JTextField("Last Updated Field");
+        lastUpdatedField.setBounds(675, 250, 200, 50);
+        lastUpdatedField.setFont(textFont);
+
         //Adds the root group as the root node for the tree
         groupList.add(rootGroup);
         rootNode = new DefaultMutableTreeNode(rootGroup);
@@ -149,6 +177,12 @@ public class Admin implements ActionListener, TreeSelectionListener
         frame.add(showGroupTotalButton);
         frame.add(showMsgTotalButton);
         frame.add(showPositiveButton);
+
+        //Added for assignment 3
+        frame.add(checkValidationButton);
+        frame.add(findLastUpdatedUserButton);
+        frame.add(lastUpdatedField);
+        frame.add(validationField);
 
         frame.add(treeView);
 
@@ -404,6 +438,102 @@ public class Admin implements ActionListener, TreeSelectionListener
                 String percentage = Double.toString(positivePercent).substring(0, 4);
                 showButtonsField.setText("Positive Message Percentage: " + percentage + "%");
             }
+
+        }
+
+        //New Buttons for Assignment 3
+        if((e.getSource() == checkValidationButton))
+        {
+            //Gets the names of all users and groups
+            ValidVisitor v = new ValidVisitor();
+            rootGroup.accept(v);
+
+            ArrayList<String> names = new ArrayList<>();
+
+            names = v.getNamesList();
+
+            boolean valid = true;
+        
+            //Checks if IDs are valid
+            for(int y = 0; y < names.size(); y++)
+            {
+                //Checks if ID has a space
+                if(names.get(y).contains(" "))
+                {
+                    valid = false;
+                }
+
+                //Checks if ID is unique
+                for(int z = 0; z < names.size(); z++)
+                {
+                    if(z == y)
+                    {
+
+                    }
+
+                    else
+                    {
+                        if(names.get(y).equals(names.get(z)))
+                        {
+                            valid = false;
+                        }
+                    }
+                }
+
+            }
+
+            if(valid == true)
+            {
+                validationField.setText("IDs are Valid");
+            }
+
+            else
+            {
+                validationField.setText("IDs are not Valid");
+            }
+
+        }
+
+        if(e.getSource() == findLastUpdatedUserButton)
+        {
+            //Gets all users into a list
+            UpdatedTimeVisitor u = new UpdatedTimeVisitor();
+            rootGroup.accept(u);
+
+            ArrayList<User> users = new ArrayList<>();
+
+            users = u.getUsers();
+
+            //If no users exist
+            if(users.size() == 0)
+            {
+                lastUpdatedField.setText("No Users Available");
+            }
+
+            //Checks all users latest updated time and returns the user with the largest value
+            else
+            {
+                long time;
+                long largest = 0;
+                int latestIndex = 0;
+
+                for(int x = 0; x < users.size(); x++)
+                {
+                    time = users.get(x).getLastUpdatedTime();
+
+                    if(time > largest)
+                    {
+                    largest = time;
+                    latestIndex = x;
+                    }
+                }
+
+                String lastUpdatedName = users.get(latestIndex).toString();
+
+
+                lastUpdatedField.setText(lastUpdatedName);
+            }
+            
 
         }
 

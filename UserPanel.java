@@ -34,6 +34,9 @@ public class UserPanel implements ActionListener
         this.currentUser = u;
         this.userList = uList;
 
+        System.out.println(currentUser.toString() + "'s creation time: " + currentUser.getCreationTime());
+        System.out.println(currentUser.toString() + "'s last updated time: " + currentUser.getLastUpdatedTime() + "\n");
+
         //UI Java Swing elements
         //Entire JFrame
         frame = new JFrame(u.toString() + "'s Panel");
@@ -122,12 +125,14 @@ public class UserPanel implements ActionListener
             Tweet newTweet = new Tweet(newTweetText, currentUser);
 
             currentUser.makeTweet(newTweet);
+            currentUser.updateTime();
 
             //Update Followers' Feeds
             ArrayList<User> needUpdate = currentUser.getFollowers();
             for(int x = 0; x < needUpdate.size(); x++)
             {
                 needUpdate.get(x).addToFeed(newTweet);
+                needUpdate.get(x).updateTime();
             }
         }
     }

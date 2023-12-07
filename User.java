@@ -8,6 +8,10 @@ public class User implements Entity
     private ArrayList<Tweet> userFeed = new ArrayList<Tweet>();
     private ArrayList<Tweet> userTweets = new ArrayList<Tweet>();
 
+    //Added for Assignment 3
+    private long creationTime;
+    private long lastUpdateTime;
+
     //Observers
     private FollowersListFeed liveFollowers = new FollowersListFeed();
     private FollowersList followersSubject = new FollowersList();
@@ -18,6 +22,8 @@ public class User implements Entity
     public User(String id)
     {
         this.userID = id;
+        this.creationTime = System.currentTimeMillis();
+        this.lastUpdateTime = creationTime;
 
         //Observers
         feedSubject.attach(liveFeed);
@@ -138,5 +144,21 @@ public class User implements Entity
     public void accept(EntityVisitor visitor) 
     {
         visitor.visitUser(this);
+    }
+
+    //Added for Assignment 3
+    public long getCreationTime()
+    {
+        return creationTime;
+    }
+
+    public void updateTime()
+    {
+        this.lastUpdateTime = System.currentTimeMillis();
+    }
+
+    public long getLastUpdatedTime()
+    {
+        return lastUpdateTime;
     }
 }

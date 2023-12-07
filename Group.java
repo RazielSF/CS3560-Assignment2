@@ -5,6 +5,9 @@ public class Group implements Entity
     private String groupID;
     private ArrayList<Entity> groupMembers = new ArrayList<Entity>();
 
+    //Added for Assignment 3
+    private long creationTime;
+
     public Group(String id)
     {
         this.groupID = id;
@@ -62,5 +65,11 @@ public class Group implements Entity
         {
             e.accept(visitor);
         }
+    }
+
+    //Added for Assignment 3
+    public long getCreationTime()
+    {
+        return creationTime;
     }
 }
